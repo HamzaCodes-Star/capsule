@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:capsule/domain/models/garment.dart';
-import 'package:capsule/domain/models/outfit.dart';
 import 'package:capsule/domain/models/outfit_log.dart';
 
 void main() {
