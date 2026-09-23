@@ -35,50 +35,36 @@ class GarmentSilhouette extends StatelessWidget {
     final effectiveWidth = width ?? size;
     final effectiveHeight = height ?? size;
 
-    final isAsset = garment.imageUrl.startsWith('assets/');
-    final isLocalFile = garment.imageUrl.isNotEmpty && !isAsset && File(garment.imageUrl).existsSync();
+    var assetPath = garment.imageUrl;
+    if (assetPath.endsWith('.jpg')) {
+      final pngPath = assetPath.replaceAll('.jpg', '.png');
+      // If a png equivalent exists, use it
+      if (pngPath.contains('selvedge_denim') ||
+          pngPath.contains('stone_oxford') ||
+          pngPath.contains('white_sneaker') ||
+          pngPath.contains('camel_overcoat')) {
+        assetPath = pngPath;
+      }
+    }
+
+    final isAsset = assetPath.startsWith('assets/');
+    final isLocalFile = assetPath.isNotEmpty && !isAsset && File(assetPath).existsSync();
 
     Widget garmentWidget;
 
     if (isAsset || isLocalFile) {
-      garmentWidget = Container(
+      garmentWidget = SizedBox(
         width: effectiveWidth,
         height: effectiveHeight,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: showShadow
-              ? [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.35),
-                    blurRadius: 18,
-                    offset: const Offset(0, 10),
-                  ),
-                ]
-              : null,
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(16),
-          child: isAsset
-              ? Image.asset(garment.imageUrl, fit: BoxFit.contain)
-              : Image.file(File(garment.imageUrl), fit: BoxFit.contain),
-        ),
+        child: isAsset
+            ? Image.asset(assetPath, fit: BoxFit.contain)
+            : Image.file(File(assetPath), fit: BoxFit.contain),
       );
     } else {
       final color = _parseHex(garment.hexCode);
-      garmentWidget = Container(
+      garmentWidget = SizedBox(
         width: effectiveWidth,
         height: effectiveHeight,
-        decoration: BoxDecoration(
-          boxShadow: showShadow
-              ? [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.25),
-                    blurRadius: 16,
-                    offset: const Offset(0, 8),
-                  ),
-                ]
-              : null,
-        ),
         child: CustomPaint(
           painter: _GarmentPainter(category: garment.category, color: color),
         ),
@@ -96,13 +82,13 @@ class GarmentSilhouette extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
               decoration: BoxDecoration(
-                color: const Color(0xFF1E2420),
+                color: const Color(0xFF161A17),
                 borderRadius: BorderRadius.circular(4),
-                border: Border.all(color: Colors.white24, width: 0.7),
+                border: Border.all(color: Colors.white24, width: 0.8),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.4),
-                    blurRadius: 6,
+                    color: Colors.black.withValues(alpha: 0.5),
+                    blurRadius: 8,
                     offset: const Offset(0, 2),
                   ),
                 ],
