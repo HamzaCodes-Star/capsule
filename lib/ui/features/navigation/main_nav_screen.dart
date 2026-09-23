@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../daily_stylist/daily_stylist_screen.dart';
 import '../wardrobe/wardrobe_screen.dart';
 import '../batch_capture/batch_capture_screen.dart';
-import '../lookbook/lookbook_screen.dart';
+import '../laundry/laundry_screen.dart';
 import '../settings/settings_screen.dart';
 import '../../core/theme/app_theme.dart';
 
@@ -20,7 +20,7 @@ class _MainNavScreenState extends State<MainNavScreen> {
     DailyStylistScreen(),
     WardrobeScreen(),
     BatchCaptureScreen(),
-    LookbookScreen(),
+    LaundryScreen(),
     SettingsScreen(),
   ];
 
