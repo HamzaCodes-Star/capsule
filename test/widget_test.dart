@@ -19,6 +19,6 @@ void main() {
       ),
     );
 
-    expect(find.text('C A P S U L E'), findsOneWidget);
+    expect(find.text('Morning, Alex.'), findsOneWidget);
   });
 }

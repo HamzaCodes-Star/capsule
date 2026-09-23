@@ -33,10 +33,17 @@ class _MainNavScreenState extends State<MainNavScreen> {
       ),
       bottomNavigationBar: Container(
         decoration: const BoxDecoration(
+          color: AppTheme.surface,
           border: Border(top: BorderSide(color: AppTheme.surfaceBorder, width: 1)),
         ),
         child: BottomNavigationBar(
           currentIndex: _currentIndex,
+          backgroundColor: AppTheme.surface,
+          selectedItemColor: AppTheme.tertiaryGold,
+          unselectedItemColor: AppTheme.textMuted,
+          selectedFontSize: 11,
+          unselectedFontSize: 11,
+          type: BottomNavigationBarType.fixed,
           onTap: (index) {
             setState(() {
               _currentIndex = index;
@@ -44,29 +51,29 @@ class _MainNavScreenState extends State<MainNavScreen> {
           },
           items: const [
             BottomNavigationBarItem(
-              icon: Icon(Icons.style_outlined),
-              activeIcon: Icon(Icons.style),
-              label: 'Stylist',
+              icon: Icon(Icons.home_outlined),
+              activeIcon: Icon(Icons.home),
+              label: 'Today',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.checkroom_outlined),
-              activeIcon: Icon(Icons.checkroom),
+              icon: Icon(Icons.grid_view_outlined),
+              activeIcon: Icon(Icons.grid_view),
               label: 'Wardrobe',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.camera_enhance_outlined),
-              activeIcon: Icon(Icons.camera_enhance),
-              label: 'Ingest',
+              icon: Icon(Icons.camera_alt_outlined),
+              activeIcon: Icon(Icons.camera_alt),
+              label: 'Add',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.auto_stories_outlined),
-              activeIcon: Icon(Icons.auto_stories),
-              label: 'Lookbook',
+              icon: Icon(Icons.delete_outline),
+              activeIcon: Icon(Icons.delete),
+              label: 'Laundry',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.settings_outlined),
-              activeIcon: Icon(Icons.settings),
-              label: 'Settings',
+              icon: Icon(Icons.person_outline),
+              activeIcon: Icon(Icons.person),
+              label: 'You',
             ),
           ],
         ),

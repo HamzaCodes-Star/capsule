@@ -2,107 +2,114 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
-  // Luxury Palette: Obsidian, Deep Slate, Camel & Satin Gold
-  static const Color background = Color(0xFF090D16);
-  static const Color surface = Color(0xFF111827);
-  static const Color surfaceLight = Color(0xFF1F2937);
-  static const Color surfaceBorder = Color(0xFF2E384D);
+  // Brand Palette from Design System
+  static const Color primaryTeal = Color(0xFF004741);     // Primary: Forest Teal
+  static const Color secondaryCream = Color(0xFFF0EDE4);  // Secondary: Ecru / Stone
+  static const Color tertiaryGold = Color(0xFFFFBE0B);    // Tertiary: Vibrant Marigold
+  static const Color neutralDark = Color(0xFF131815);     // Neutral: Deep Forest Noir (Background)
 
-  static const Color accentCamel = Color(0xFFC19A6B);
-  static const Color accentGold = Color(0xFFD4AF37);
-  static const Color accentCamelMuted = Color(0xFF8B6B43);
+  // Surface & Layering
+  static const Color surface = Color(0xFF1B221E);         // Main Card Surface
+  static const Color surfaceLight = Color(0xFF242C27);    // Secondary Surface
+  static const Color surfaceBorder = Color(0xFF2E3933);   // Subtle Border
+  static const Color canvasCard = Color(0xFF262F2A);      // Outfit Canvas Background
 
-  static const Color textPrimary = Color(0xFFF8FAFC);
-  static const Color textSecondary = Color(0xFF94A3B8);
-  static const Color textMuted = Color(0xFF64748B);
+  // Text Colors
+  static const Color textPrimary = Color(0xFFFBFBFB);
+  static const Color textSecondary = Color(0xFFC0CDC6);
+  static const Color textMuted = Color(0xFF798B82);
 
-  // Functional Status Colors
+  // Status & Tags
   static const Color statusSuccess = Color(0xFF10B981);
-  static const Color statusWarning = Color(0xFFF59E0B);
-  static const Color statusDanger = Color(0xFFEF4444);
+  static const Color statusWarning = Color(0xFFFFBE0B);
+  static const Color statusDanger = Color(0xFFD94436);
+
+  // Backwards compatibility aliases
+  static const Color background = neutralDark;
+  static const Color accentCamel = tertiaryGold;
+  static const Color accentGold = tertiaryGold;
 
   static ThemeData get darkTheme {
     return ThemeData(
       brightness: Brightness.dark,
-      scaffoldBackgroundColor: background,
-      primaryColor: accentCamel,
+      scaffoldBackgroundColor: neutralDark,
+      primaryColor: tertiaryGold,
       colorScheme: const ColorScheme.dark(
-        primary: accentCamel,
-        secondary: accentGold,
+        primary: tertiaryGold,
+        secondary: primaryTeal,
         surface: surface,
         error: statusDanger,
-        onPrimary: Colors.black,
+        onPrimary: Color(0xFF131815),
         onSurface: textPrimary,
       ),
-      textTheme: GoogleFonts.interTextTheme(
+      textTheme: GoogleFonts.dmSansTextTheme(
         ThemeData.dark().textTheme.copyWith(
-          displayLarge: GoogleFonts.outfit(
+          displayLarge: GoogleFonts.epilogue(
             fontSize: 32,
             fontWeight: FontWeight.w700,
             color: textPrimary,
             letterSpacing: -0.5,
           ),
-          headlineLarge: GoogleFonts.outfit(
+          headlineLarge: GoogleFonts.epilogue(
             fontSize: 26,
             fontWeight: FontWeight.w700,
             color: textPrimary,
           ),
-          headlineMedium: GoogleFonts.outfit(
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
+          headlineMedium: GoogleFonts.epilogue(
+            fontSize: 22,
+            fontWeight: FontWeight.w700,
             color: textPrimary,
           ),
-          titleLarge: GoogleFonts.outfit(
+          titleLarge: GoogleFonts.epilogue(
             fontSize: 18,
             fontWeight: FontWeight.w600,
             color: textPrimary,
           ),
-          titleMedium: GoogleFonts.inter(
+          titleMedium: GoogleFonts.dmSans(
             fontSize: 15,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w600,
             color: textPrimary,
           ),
-          bodyLarge: GoogleFonts.inter(
+          bodyLarge: GoogleFonts.dmSans(
             fontSize: 14,
             fontWeight: FontWeight.w400,
             color: textSecondary,
           ),
-          bodyMedium: GoogleFonts.inter(
+          bodyMedium: GoogleFonts.dmSans(
             fontSize: 13,
             fontWeight: FontWeight.w400,
             color: textSecondary,
           ),
-          labelLarge: GoogleFonts.inter(
+          labelLarge: GoogleFonts.dmSans(
             fontSize: 13,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w700,
             letterSpacing: 0.5,
           ),
         ),
       ),
       appBarTheme: AppBarTheme(
-        backgroundColor: background,
+        backgroundColor: neutralDark,
         elevation: 0,
         centerTitle: false,
-        titleTextStyle: GoogleFonts.outfit(
-          fontSize: 22,
+        titleTextStyle: GoogleFonts.epilogue(
+          fontSize: 24,
           fontWeight: FontWeight.w700,
           color: textPrimary,
-          letterSpacing: 0.5,
         ),
         iconTheme: const IconThemeData(color: textPrimary),
       ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: surface,
-        selectedItemColor: accentCamel,
+        selectedItemColor: tertiaryGold,
         unselectedItemColor: textMuted,
         type: BottomNavigationBarType.fixed,
-        elevation: 12,
+        elevation: 16,
       ),
       cardTheme: CardThemeData(
         color: surface,
         elevation: 0,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(20),
           side: const BorderSide(color: surfaceBorder, width: 1),
         ),
       ),
