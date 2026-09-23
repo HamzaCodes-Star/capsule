@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../data/repositories/wardrobe_repository.dart';
 import '../../core/theme/app_theme.dart';
+import '../onboarding/onboarding_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -214,6 +215,53 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     },
                     icon: const Icon(Icons.restart_alt, size: 18, color: AppTheme.statusWarning),
                     label: const Text('Reset to Default Minimalist Capsule', style: TextStyle(color: AppTheme.statusWarning)),
+                    style: OutlinedButton.styleFrom(
+                      side: const BorderSide(color: AppTheme.surfaceBorder),
+                      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            // Onboarding Tour
+            Container(
+              padding: const EdgeInsets.all(18),
+              decoration: BoxDecoration(
+                color: AppTheme.surface,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: AppTheme.surfaceBorder),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'ONBOARDING TOUR',
+                    style: TextStyle(
+                      fontSize: 11,
+                      letterSpacing: 1.5,
+                      fontWeight: FontWeight.w700,
+                      color: AppTheme.tertiaryGold,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    'Review the 90-second bed-spread batch capture walkthrough and key features.',
+                    style: TextStyle(fontSize: 12, color: AppTheme.textMuted, height: 1.4),
+                  ),
+                  const SizedBox(height: 14),
+                  OutlinedButton.icon(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const OnboardingScreen()),
+                      );
+                    },
+                    icon: const Icon(Icons.slideshow, size: 18, color: AppTheme.tertiaryGold),
+                    label: const Text('Replay Onboarding Tour', style: TextStyle(color: AppTheme.tertiaryGold)),
                     style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: AppTheme.surfaceBorder),
                       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),

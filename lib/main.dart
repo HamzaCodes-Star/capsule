@@ -4,12 +4,11 @@ import 'package:provider/provider.dart';
 import 'data/repositories/wardrobe_repository.dart';
 import 'ui/core/theme/app_theme.dart';
 import 'ui/features/daily_stylist/daily_stylist_viewmodel.dart';
-import 'ui/features/navigation/main_nav_screen.dart';
+import 'ui/features/onboarding/onboarding_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Set immersive dark status bar navigation styling
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
@@ -42,7 +41,7 @@ class CapsuleApp extends StatelessWidget {
       title: 'Capsule',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.darkTheme,
-      home: const MainNavScreen(),
+      home: const OnboardingScreen(),
     );
   }
 }
