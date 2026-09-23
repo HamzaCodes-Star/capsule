@@ -58,66 +58,75 @@ class _DailyStylistScreenState extends State<DailyStylistScreen> {
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setDialogState) => AlertDialog(
           backgroundColor: AppTheme.surface,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          title: const Text('Weather & Formality Context'),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+            side: const BorderSide(color: AppTheme.surfaceBorder),
+          ),
+          title: Text(
+            'Adjust Weather Context',
+            style: GoogleFonts.epilogue(
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
+              color: AppTheme.textPrimary,
+            ),
+          ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('Temperature: ${vm.context.temperature}°C'),
-                  Switch(
-                    value: vm.context.isRainy,
-                    activeThumbColor: AppTheme.tertiaryGold,
-                    onChanged: (val) {
-                      setDialogState(() {});
-                      vm.toggleRain(val, cleanGarments);
-                    },
-                  ),
-                ],
+              Text(
+                'Temperature: ${vm.context.temperature}°C',
+                style: GoogleFonts.dmSans(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: AppTheme.textPrimary,
+                ),
               ),
               Slider(
                 value: vm.context.temperature.toDouble(),
-                min: 5,
-                max: 35,
+                min: 0,
+                max: 38,
+                divisions: 38,
                 activeColor: AppTheme.tertiaryGold,
+                inactiveColor: AppTheme.surfaceLight,
                 onChanged: (val) {
                   setDialogState(() {});
                   vm.updateTemperature(val.round(), cleanGarments);
                 },
               ),
               const SizedBox(height: 12),
-              Row(
-                children: [1, 2, 3].map((tier) {
-                  final isSel = vm.context.targetFormality == tier;
-                  return Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                      child: ChoiceChip(
-                        label: Text(_formatFormality(tier)),
-                        selected: isSel,
-                        selectedColor: AppTheme.tertiaryGold,
-                        labelStyle: TextStyle(
-                          color: isSel ? Colors.black : AppTheme.textSecondary,
-                          fontSize: 11,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        onSelected: (_) {
-                          setDialogState(() {});
-                          vm.setFormality(tier, cleanGarments);
-                        },
-                      ),
-                    ),
-                  );
-                }).toList(),
+              SwitchListTile(
+                contentPadding: EdgeInsets.zero,
+                activeThumbColor: AppTheme.tertiaryGold,
+                title: Text(
+                  'Raining outside?',
+                  style: GoogleFonts.dmSans(
+                    fontSize: 14,
+                    color: AppTheme.textPrimary,
+                  ),
+                ),
+                subtitle: Text(
+                  'Enforces outerwear & rejects suede footwear',
+                  style: GoogleFonts.dmSans(fontSize: 11, color: AppTheme.textMuted),
+                ),
+                value: vm.context.isRainy,
+                onChanged: (val) {
+                  setDialogState(() {});
+                  vm.toggleRain(val, cleanGarments);
+                },
               ),
             ],
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx),
-              child: const Text('Done', style: TextStyle(color: AppTheme.tertiaryGold)),
+              child: Text(
+                'Done',
+                style: GoogleFonts.dmSans(
+                  fontWeight: FontWeight.w700,
+                  color: AppTheme.tertiaryGold,
+                ),
+              ),
             ),
           ],
         ),
@@ -129,105 +138,92 @@ class _DailyStylistScreenState extends State<DailyStylistScreen> {
   Widget build(BuildContext context) {
     final repo = Provider.of<WardrobeRepository>(context);
     final vm = Provider.of<DailyStylistViewModel>(context);
-
-    if (vm.currentOutfit == null && repo.cleanGarments.isNotEmpty) {
-      vm.initialize(repo.cleanGarments);
-    }
-
     final outfit = vm.currentOutfit;
+
     final now = DateTime.now();
-    final dateStr = DateFormat('EEEE, d MMM').format(now).toUpperCase();
+    final dateStr = DateFormat('EEEE, MMM d').format(now).toUpperCase();
 
     return Scaffold(
       backgroundColor: AppTheme.neutralDark,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Top Greeting & Avatar
+              // HEADER (Date & Weather Pill)
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        dateStr,
-                        style: GoogleFonts.dmSans(
-                          fontSize: 11,
-                          letterSpacing: 2.0,
-                          fontWeight: FontWeight.w700,
-                          color: AppTheme.tertiaryGold,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'Morning, Alex.',
-                        style: GoogleFonts.epilogue(
-                          fontSize: 28,
-                          fontWeight: FontWeight.w700,
-                          color: AppTheme.textPrimary,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Container(
-                    width: 44,
-                    height: 44,
-                    decoration: BoxDecoration(
-                      color: AppTheme.surfaceLight,
-                      shape: BoxShape.circle,
-                      border: Border.all(color: AppTheme.surfaceBorder, width: 1.5),
+                  Text(
+                    dateStr,
+                    style: GoogleFonts.dmSans(
+                      fontSize: 11,
+                      letterSpacing: 2.0,
+                      fontWeight: FontWeight.w700,
+                      color: AppTheme.textMuted,
                     ),
-                    alignment: Alignment.center,
-                    child: Text(
-                      'AK',
-                      style: GoogleFonts.dmSans(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700,
-                        color: AppTheme.textPrimary,
+                  ),
+                  InkWell(
+                    onTap: () => _showWeatherDialog(context, vm, repo.cleanGarments),
+                    borderRadius: BorderRadius.circular(20),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      decoration: BoxDecoration(
+                        color: AppTheme.surfaceLight,
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: AppTheme.surfaceBorder),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            vm.context.isRainy ? Icons.water_drop : Icons.wb_sunny_outlined,
+                            size: 13,
+                            color: AppTheme.tertiaryGold,
+                          ),
+                          const SizedBox(width: 5),
+                          Text(
+                            '${vm.context.temperature}°C${vm.context.isRainy ? ' • Rain' : ''}',
+                            style: GoogleFonts.dmSans(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w600,
+                              color: AppTheme.textPrimary,
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          const Icon(Icons.tune, size: 11, color: AppTheme.textMuted),
+                        ],
                       ),
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 12),
 
-              // Weather Sub-header (Interactive)
-              GestureDetector(
-                onTap: () => _showWeatherDialog(context, vm, repo.cleanGarments),
+              // Formality Dial Pills
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
-                    Icon(
-                      vm.context.isRainy ? Icons.water_drop : Icons.wb_sunny_outlined,
-                      size: 15,
-                      color: vm.context.isRainy ? Colors.lightBlueAccent : AppTheme.tertiaryGold,
-                    ),
-                    const SizedBox(width: 6),
-                    Text(
-                      '${vm.context.temperature}°  ${vm.context.isRainy ? "Rain" : "Clear"} · High ${vm.context.temperature + 4}°  London',
-                      style: GoogleFonts.dmSans(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w500,
-                        color: AppTheme.textSecondary,
-                      ),
-                    ),
+                    _buildFormalityPill('Casual', 1, vm, repo.cleanGarments),
+                    const SizedBox(width: 8),
+                    _buildFormalityPill('Smart casual', 2, vm, repo.cleanGarments),
+                    const SizedBox(width: 8),
+                    _buildFormalityPill('Tailored', 3, vm, repo.cleanGarments),
                   ],
                 ),
               ),
-              const SizedBox(height: 22),
+              const SizedBox(height: 16),
 
-              // Main Assembled Outfit Card (Matching Image 3)
+              // MAIN EDITORIAL FLAT-LAY CANVAS OR EMPTY STATE
               if (outfit != null) ...[
-                _buildOutfitCard(context, outfit, vm, repo),
+                _buildEditorialFlatLayCard(context, outfit, vm, repo),
               ] else ...[
                 _buildEmptyState(repo),
               ],
               const SizedBox(height: 16),
 
-              // Secondary Banner: "TRIP COMING UP?"
+              // Trip / Capsule Planner Banner
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                 decoration: BoxDecoration(
@@ -240,7 +236,7 @@ class _DailyStylistScreenState extends State<DailyStylistScreen> {
                     Container(
                       width: 40,
                       height: 40,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: AppTheme.surfaceLight,
                         shape: BoxShape.circle,
                       ),
@@ -284,12 +280,40 @@ class _DailyStylistScreenState extends State<DailyStylistScreen> {
     );
   }
 
-  Widget _buildOutfitCard(
+  Widget _buildFormalityPill(String label, int tier, DailyStylistViewModel vm, List<Garment> cleanGarments) {
+    final isSelected = vm.context.targetFormality == tier;
+    return GestureDetector(
+      onTap: () => vm.setFormality(tier, cleanGarments),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+        decoration: BoxDecoration(
+          color: isSelected ? AppTheme.tertiaryGold : AppTheme.surface,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: isSelected ? AppTheme.tertiaryGold : AppTheme.surfaceBorder,
+          ),
+        ),
+        child: Text(
+          label,
+          style: GoogleFonts.dmSans(
+            fontSize: 12,
+            fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+            color: isSelected ? Colors.black : AppTheme.textSecondary,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEditorialFlatLayCard(
     BuildContext context,
     Outfit outfit,
     DailyStylistViewModel vm,
     WardrobeRepository repo,
   ) {
+    final hasOuter = outfit.hasOuterwear && outfit.outerwear != null;
+
     return Container(
       decoration: BoxDecoration(
         color: AppTheme.surface,
@@ -297,9 +321,9 @@ class _DailyStylistScreenState extends State<DailyStylistScreen> {
         border: Border.all(color: AppTheme.surfaceBorder),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.4),
-            blurRadius: 24,
-            offset: const Offset(0, 10),
+            color: Colors.black.withValues(alpha: 0.45),
+            blurRadius: 28,
+            offset: const Offset(0, 12),
           ),
         ],
       ),
@@ -321,7 +345,7 @@ class _DailyStylistScreenState extends State<DailyStylistScreen> {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
                   color: AppTheme.tertiaryGold,
                   borderRadius: BorderRadius.circular(20),
@@ -339,109 +363,183 @@ class _DailyStylistScreenState extends State<DailyStylistScreen> {
           ),
           const SizedBox(height: 8),
 
-          // Headline in Epilogue
+          // Headline
           Text(
             _getHeadline(outfit),
             style: GoogleFonts.epilogue(
-              fontSize: 24,
+              fontSize: 22,
               fontWeight: FontWeight.w700,
               color: AppTheme.textPrimary,
               height: 1.25,
             ),
           ),
-          const SizedBox(height: 18),
+          const SizedBox(height: 16),
 
-          // COMPLETE OUTFIT FLAT-LAY CANVAS (As in Image 3)
-          Container(
-            height: 250,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: AppTheme.canvasCard,
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
-            ),
-            padding: const EdgeInsets.all(16),
-            child: Stack(
-              children: [
-                // Top Left: SHIRT
-                Positioned(
-                  top: 0,
-                  left: 8,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        outfit.top.subType.toUpperCase(),
-                        style: GoogleFonts.dmSans(
-                          fontSize: 9,
-                          letterSpacing: 1.0,
-                          fontWeight: FontWeight.w700,
-                          color: AppTheme.textMuted,
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      GarmentSilhouette(
-                        garment: outfit.top,
-                        size: 130,
-                      ),
-                    ],
+          // THE ASYMMETRICAL FLAT-LAY STUDIO CANVAS (Matching Reference Photos)
+          GestureDetector(
+            onHorizontalDragEnd: (details) {
+              if (details.primaryVelocity != null) {
+                if (details.primaryVelocity! < -150) {
+                  vm.nextOutfit();
+                } else if (details.primaryVelocity! > 150) {
+                  vm.previousOutfit();
+                }
+              }
+            },
+            child: Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: const Color(0xFF1E2621), // Studio Slate Surface
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.35),
+                    blurRadius: 20,
+                    offset: const Offset(0, 8),
                   ),
-                ),
-
-                // Top Right: TROUSERS
-                Positioned(
-                  top: 0,
-                  right: 8,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        outfit.bottom.subType.toUpperCase(),
+                ],
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+              child: Column(
+                children: [
+                  // Stylist / Occasion Badge (e.g. "DATE NIGHT" from Image 3)
+                  Center(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withValues(alpha: 0.8),
+                        borderRadius: BorderRadius.circular(4),
+                        border: Border.all(color: Colors.white24, width: 0.8),
+                      ),
+                      child: Text(
+                        vm.occasionBadge,
                         style: GoogleFonts.dmSans(
-                          fontSize: 9,
-                          letterSpacing: 1.0,
-                          fontWeight: FontWeight.w700,
-                          color: AppTheme.textMuted,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: 1.5,
+                          color: AppTheme.tertiaryGold,
                         ),
                       ),
-                      const SizedBox(height: 6),
-                      GarmentSilhouette(
-                        garment: outfit.bottom,
-                        size: 130,
-                      ),
-                    ],
-                  ),
-                ),
-
-                // Bottom Center: SHOES
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        GarmentSilhouette(
-                          garment: outfit.footwear,
-                          size: 120,
-                        ),
-                        const SizedBox(height: 2),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: Text(
-                            outfit.footwear.subType.toUpperCase(),
-                            style: GoogleFonts.dmSans(
-                              fontSize: 9,
-                              letterSpacing: 1.0,
-                              fontWeight: FontWeight.w700,
-                              color: AppTheme.textMuted,
-                            ),
-                          ),
-                        ),
-                      ],
                     ),
                   ),
+                  const SizedBox(height: 16),
+
+                  // 2-Column Asymmetrical Grid Layout
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // LEFT COLUMN: Outerwear on Top + Base Top Below
+                      Expanded(
+                        child: Column(
+                          children: [
+                            if (hasOuter) ...[
+                              // Outerwear / Jacket
+                              GarmentSilhouette(
+                                garment: outfit.outerwear!,
+                                width: 140,
+                                height: 135,
+                              ),
+                              const SizedBox(height: 14),
+                              // Base Top / Knit
+                              GarmentSilhouette(
+                                garment: outfit.top,
+                                width: 130,
+                                height: 125,
+                              ),
+                            ] else ...[
+                              // Base Top prominent
+                              GarmentSilhouette(
+                                garment: outfit.top,
+                                width: 145,
+                                height: 155,
+                              ),
+                              const SizedBox(height: 16),
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                decoration: BoxDecoration(
+                                  color: AppTheme.surfaceLight,
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: Text(
+                                  'Base Layer Clean',
+                                  style: GoogleFonts.dmSans(fontSize: 10, color: AppTheme.textMuted),
+                                ),
+                              ),
+                            ],
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 14),
+
+                      // RIGHT COLUMN: Bottoms (with "YOUR ITEM" badge) + Shoes Below
+                      Expanded(
+                        child: Column(
+                          children: [
+                            // Trousers / Jeans with "YOUR ITEM" badge (from Image 4)
+                            GarmentSilhouette(
+                              garment: outfit.bottom,
+                              width: 135,
+                              height: 160,
+                              badgeText: 'YOUR ITEM',
+                            ),
+                            const SizedBox(height: 20),
+
+                            // Footwear / Sneakers
+                            GarmentSilhouette(
+                              garment: outfit.footwear,
+                              width: 130,
+                              height: 95,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+
+          // CAROUSEL COMBINATIONS CONTROLLER
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            decoration: BoxDecoration(
+              color: AppTheme.surfaceLight,
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: AppTheme.surfaceBorder),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.chevron_left, color: AppTheme.tertiaryGold, size: 24),
+                  onPressed: vm.totalOutfits > 1 ? vm.previousOutfit : null,
+                  tooltip: 'Previous Outfit Combination',
+                ),
+                Column(
+                  children: [
+                    Text(
+                      'LOOK ${vm.currentIndex + 1} OF ${vm.totalOutfits}',
+                      style: GoogleFonts.dmSans(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 1.4,
+                        color: AppTheme.textPrimary,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      'Swipe left/right to browse looks',
+                      style: GoogleFonts.dmSans(fontSize: 10, color: AppTheme.textMuted),
+                    ),
+                  ],
+                ),
+                IconButton(
+                  icon: const Icon(Icons.chevron_right, color: AppTheme.tertiaryGold, size: 24),
+                  onPressed: vm.totalOutfits > 1 ? vm.nextOutfit : null,
+                  tooltip: 'Next Outfit Combination',
                 ),
               ],
             ),
@@ -468,7 +566,7 @@ class _DailyStylistScreenState extends State<DailyStylistScreen> {
           ),
           const SizedBox(height: 20),
 
-          // Action Buttons: "Wear this" and "Shuffle"
+          // Action Buttons: "Wear this" and "Shuffle All"
           Row(
             children: [
               Expanded(
@@ -494,7 +592,7 @@ class _DailyStylistScreenState extends State<DailyStylistScreen> {
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                   ),
                   child: Text(
-                    vm.isWornToday ? 'Worn Today' : 'Wear this',
+                    vm.isWornToday ? 'Worn Today' : 'Wear this Look',
                     style: GoogleFonts.dmSans(
                       fontSize: 15,
                       fontWeight: FontWeight.w700,
@@ -547,7 +645,7 @@ class _DailyStylistScreenState extends State<DailyStylistScreen> {
           ),
           const SizedBox(height: 6),
           Text(
-            'Wash your garments or reset laundry to get today\'s curated edit.',
+            'Wash your garments or reset laundry to get today curated edit.',
             textAlign: TextAlign.center,
             style: GoogleFonts.dmSans(fontSize: 13, color: AppTheme.textMuted),
           ),

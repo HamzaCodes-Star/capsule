@@ -12,7 +12,8 @@ class DailyStylistViewModel extends ChangeNotifier {
     targetFormality: 2, // Smart Casual by default
   );
 
-  Outfit? _currentOutfit;
+  List<Outfit> _availableOutfits = [];
+  int _currentIndex = 0;
   bool _isGenerating = false;
   bool _isWornToday = false;
 
@@ -21,7 +22,18 @@ class DailyStylistViewModel extends ChangeNotifier {
   String? _lockedFootwearId;
 
   MatchingContext get context => _context;
-  Outfit? get currentOutfit => _currentOutfit;
+  List<Outfit> get availableOutfits => _availableOutfits;
+  int get currentIndex => _currentIndex;
+  int get totalOutfits => _availableOutfits.length;
+
+  Outfit? get currentOutfit {
+    if (_availableOutfits.isEmpty) return null;
+    if (_currentIndex >= _availableOutfits.length) {
+      _currentIndex = 0;
+    }
+    return _availableOutfits[_currentIndex];
+  }
+
   bool get isGenerating => _isGenerating;
   bool get isWornToday => _isWornToday;
 
@@ -33,23 +45,59 @@ class DailyStylistViewModel extends ChangeNotifier {
   bool isBottomLocked(String? id) => id != null && _lockedBottomId == id;
   bool isFootwearLocked(String? id) => id != null && _lockedFootwearId == id;
 
+  String get occasionBadge {
+    if (_context.isRainy) return 'RAIN SAFE';
+    if (_context.temperature < 15) return 'COLD WEATHER CHIC';
+    switch (_context.targetFormality) {
+      case 1:
+        return 'WEEKEND COZY';
+      case 2:
+        return 'SMART CASUAL';
+      case 3:
+        return 'DATE NIGHT';
+      default:
+        return 'DAILY EDIT';
+    }
+  }
+
+  void nextOutfit() {
+    if (_availableOutfits.isNotEmpty) {
+      _currentIndex = (_currentIndex + 1) % _availableOutfits.length;
+      notifyListeners();
+    }
+  }
+
+  void previousOutfit() {
+    if (_availableOutfits.isNotEmpty) {
+      _currentIndex = (_currentIndex - 1 + _availableOutfits.length) % _availableOutfits.length;
+      notifyListeners();
+    }
+  }
+
+  void selectOutfitIndex(int index) {
+    if (index >= 0 && index < _availableOutfits.length) {
+      _currentIndex = index;
+      notifyListeners();
+    }
+  }
+
   void toggleLockTop() {
-    if (_currentOutfit != null) {
-      _lockedTopId = (_lockedTopId == _currentOutfit!.top.id) ? null : _currentOutfit!.top.id;
+    if (currentOutfit != null) {
+      _lockedTopId = (_lockedTopId == currentOutfit!.top.id) ? null : currentOutfit!.top.id;
       notifyListeners();
     }
   }
 
   void toggleLockBottom() {
-    if (_currentOutfit != null) {
-      _lockedBottomId = (_lockedBottomId == _currentOutfit!.bottom.id) ? null : _currentOutfit!.bottom.id;
+    if (currentOutfit != null) {
+      _lockedBottomId = (_lockedBottomId == currentOutfit!.bottom.id) ? null : currentOutfit!.bottom.id;
       notifyListeners();
     }
   }
 
   void toggleLockFootwear() {
-    if (_currentOutfit != null) {
-      _lockedFootwearId = (_lockedFootwearId == _currentOutfit!.footwear.id) ? null : _currentOutfit!.footwear.id;
+    if (currentOutfit != null) {
+      _lockedFootwearId = (_lockedFootwearId == currentOutfit!.footwear.id) ? null : currentOutfit!.footwear.id;
       notifyListeners();
     }
   }
@@ -62,7 +110,7 @@ class DailyStylistViewModel extends ChangeNotifier {
   }
 
   void initialize(List<Garment> availableGarments) {
-    if (_currentOutfit == null && availableGarments.isNotEmpty) {
+    if (_availableOutfits.isEmpty && availableGarments.isNotEmpty) {
       regenerateOutfit(availableGarments);
     }
   }
@@ -103,8 +151,8 @@ class DailyStylistViewModel extends ChangeNotifier {
     );
 
     final filtered = _filterByLocks(all);
-
-    _currentOutfit = filtered.isNotEmpty ? filtered.first : (all.isNotEmpty ? all.first : null);
+    _availableOutfits = filtered.isNotEmpty ? filtered : all;
+    _currentIndex = 0;
     _isGenerating = false;
     notifyListeners();
   }
@@ -121,22 +169,15 @@ class DailyStylistViewModel extends ChangeNotifier {
     );
 
     final filtered = _filterByLocks(all);
+    final pool = filtered.isNotEmpty ? filtered : all;
 
-    if (filtered.isNotEmpty) {
-      filtered.shuffle();
-      if (filtered.length > 1 && _currentOutfit != null) {
-        _currentOutfit = filtered.firstWhere(
-          (o) => o.top.id != _currentOutfit!.top.id || o.bottom.id != _currentOutfit!.bottom.id,
-          orElse: () => filtered.first,
-        );
-      } else {
-        _currentOutfit = filtered.first;
-      }
-    } else if (all.isNotEmpty) {
-      all.shuffle();
-      _currentOutfit = all.first;
+    if (pool.isNotEmpty) {
+      final shuffled = List<Outfit>.from(pool)..shuffle();
+      _availableOutfits = shuffled;
+      _currentIndex = 0;
     } else {
-      _currentOutfit = null;
+      _availableOutfits = [];
+      _currentIndex = 0;
     }
 
     _isGenerating = false;
@@ -144,9 +185,9 @@ class DailyStylistViewModel extends ChangeNotifier {
   }
 
   Future<void> wearThisOutfit(WardrobeRepository repo) async {
-    if (_currentOutfit == null || _isWornToday) return;
+    if (currentOutfit == null || _isWornToday) return;
 
-    await repo.recordWornOutfit(_currentOutfit!);
+    await repo.recordWornOutfit(currentOutfit!);
     _isWornToday = true;
     clearLocks();
     notifyListeners();

@@ -1,17 +1,24 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../../domain/models/garment.dart';
 
 class GarmentSilhouette extends StatelessWidget {
   final Garment garment;
+  final double? width;
+  final double? height;
   final double size;
   final bool showShadow;
+  final String? badgeText;
 
   const GarmentSilhouette({
     super.key,
     required this.garment,
-    this.size = 120,
+    this.width,
+    this.height,
+    this.size = 130,
     this.showShadow = true,
+    this.badgeText,
   });
 
   Color _parseHex(String hex) {
@@ -25,19 +32,24 @@ class GarmentSilhouette extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final effectiveWidth = width ?? size;
+    final effectiveHeight = height ?? size;
+
     final isAsset = garment.imageUrl.startsWith('assets/');
     final isLocalFile = garment.imageUrl.isNotEmpty && !isAsset && File(garment.imageUrl).existsSync();
 
+    Widget garmentWidget;
+
     if (isAsset || isLocalFile) {
-      return Container(
-        width: size,
-        height: size,
+      garmentWidget = Container(
+        width: effectiveWidth,
+        height: effectiveHeight,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           boxShadow: showShadow
               ? [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.45),
+                    color: Colors.black.withValues(alpha: 0.35),
                     blurRadius: 18,
                     offset: const Offset(0, 10),
                   ),
@@ -47,32 +59,70 @@ class GarmentSilhouette extends StatelessWidget {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(16),
           child: isAsset
-              ? Image.asset(garment.imageUrl, fit: BoxFit.cover)
+              ? Image.asset(garment.imageUrl, fit: BoxFit.contain)
               : Image.file(File(garment.imageUrl), fit: BoxFit.contain),
+        ),
+      );
+    } else {
+      final color = _parseHex(garment.hexCode);
+      garmentWidget = Container(
+        width: effectiveWidth,
+        height: effectiveHeight,
+        decoration: BoxDecoration(
+          boxShadow: showShadow
+              ? [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.25),
+                    blurRadius: 16,
+                    offset: const Offset(0, 8),
+                  ),
+                ]
+              : null,
+        ),
+        child: CustomPaint(
+          painter: _GarmentPainter(category: garment.category, color: color),
         ),
       );
     }
 
-    final color = _parseHex(garment.hexCode);
-
-    return Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
-        boxShadow: showShadow
-            ? [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.35),
-                  blurRadius: 16,
-                  offset: const Offset(0, 8),
+    if (badgeText != null && badgeText!.isNotEmpty) {
+      return Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.topCenter,
+        children: [
+          garmentWidget,
+          Positioned(
+            top: -12,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+              decoration: BoxDecoration(
+                color: const Color(0xFF1E2420),
+                borderRadius: BorderRadius.circular(4),
+                border: Border.all(color: Colors.white24, width: 0.7),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.4),
+                    blurRadius: 6,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Text(
+                badgeText!,
+                style: GoogleFonts.dmSans(
+                  fontSize: 9,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 1.2,
+                  color: Colors.white,
                 ),
-              ]
-            : null,
-      ),
-      child: CustomPaint(
-        painter: _GarmentPainter(category: garment.category, color: color),
-      ),
-    );
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+
+    return garmentWidget;
   }
 }
 
