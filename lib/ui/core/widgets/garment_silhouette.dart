@@ -25,7 +25,10 @@ class GarmentSilhouette extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (garment.imageUrl.isNotEmpty && File(garment.imageUrl).existsSync()) {
+    final isAsset = garment.imageUrl.startsWith('assets/');
+    final isLocalFile = garment.imageUrl.isNotEmpty && !isAsset && File(garment.imageUrl).existsSync();
+
+    if (isAsset || isLocalFile) {
       return Container(
         width: size,
         height: size,
@@ -43,7 +46,9 @@ class GarmentSilhouette extends StatelessWidget {
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(16),
-          child: Image.file(File(garment.imageUrl), fit: BoxFit.contain),
+          child: isAsset
+              ? Image.asset(garment.imageUrl, fit: BoxFit.cover)
+              : Image.file(File(garment.imageUrl), fit: BoxFit.contain),
         ),
       );
     }
@@ -99,7 +104,6 @@ class _GarmentPainter extends CustomPainter {
 
     switch (category) {
       case GarmentCategory.top:
-        // Stylized T-Shirt / Oxford Flat Lay
         final path = Path();
         path.moveTo(w * 0.35, h * 0.12);
         path.lineTo(w * 0.20, h * 0.18);
@@ -119,14 +123,12 @@ class _GarmentPainter extends CustomPainter {
         canvas.drawPath(path, paint);
         canvas.drawPath(path, outline);
 
-        // Collar & placket detail
         canvas.drawLine(Offset(w * 0.50, h * 0.18), Offset(w * 0.50, h * 0.55), detailPaint);
         canvas.drawLine(Offset(w * 0.42, h * 0.15), Offset(w * 0.50, h * 0.22), detailPaint);
         canvas.drawLine(Offset(w * 0.58, h * 0.15), Offset(w * 0.50, h * 0.22), detailPaint);
         break;
 
       case GarmentCategory.bottom:
-        // Stylized Pleated Trousers / Chinos Flat Lay
         final path = Path();
         path.moveTo(w * 0.22, h * 0.10);
         path.lineTo(w * 0.78, h * 0.10);
@@ -140,13 +142,11 @@ class _GarmentPainter extends CustomPainter {
         canvas.drawPath(path, paint);
         canvas.drawPath(path, outline);
 
-        // Pleats & pockets
         canvas.drawLine(Offset(w * 0.36, h * 0.15), Offset(w * 0.34, h * 0.30), detailPaint);
         canvas.drawLine(Offset(w * 0.64, h * 0.15), Offset(w * 0.66, h * 0.30), detailPaint);
         break;
 
       case GarmentCategory.footwear:
-        // Stylized Derby / Loafer Flat Profile
         final path = Path();
         path.moveTo(w * 0.12, h * 0.68);
         path.lineTo(w * 0.30, h * 0.44);
@@ -160,7 +160,6 @@ class _GarmentPainter extends CustomPainter {
         canvas.drawPath(path, paint);
         canvas.drawPath(path, outline);
 
-        // Sole line & laces
         canvas.drawLine(Offset(w * 0.10, h * 0.80), Offset(w * 0.86, h * 0.80), detailPaint);
         canvas.drawLine(Offset(w * 0.32, h * 0.50), Offset(w * 0.46, h * 0.54), detailPaint);
         canvas.drawLine(Offset(w * 0.30, h * 0.56), Offset(w * 0.44, h * 0.60), detailPaint);
@@ -168,7 +167,6 @@ class _GarmentPainter extends CustomPainter {
 
       case GarmentCategory.outerwear:
       case GarmentCategory.accessory:
-        // Stylized Overshirt / Bomber
         final path = Path();
         path.moveTo(w * 0.35, h * 0.10);
         path.lineTo(w * 0.15, h * 0.18);

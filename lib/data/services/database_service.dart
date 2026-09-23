@@ -62,26 +62,25 @@ class DatabaseService {
   Future<void> _seedInitialCapsule(Database db) async {
     final initialPieces = [
       // Tops
-      {'id': 'g-top-1', 'image_url': '', 'category': 'top', 'sub_type': 'Oxford Shirt', 'color_name': 'White', 'hex_code': '#F8FAFC', 'formality_tier': 2, 'current_wears': 0, 'max_wears': 1, 'in_hamper': 0},
-      {'id': 'g-top-2', 'image_url': '', 'category': 'top', 'sub_type': 'Knit Polo', 'color_name': 'Navy', 'hex_code': '#1E293B', 'formality_tier': 2, 'current_wears': 0, 'max_wears': 2, 'in_hamper': 0},
-      {'id': 'g-top-3', 'image_url': '', 'category': 'top', 'sub_type': 'Crewneck Tee', 'color_name': 'Heather Grey', 'hex_code': '#94A3B8', 'formality_tier': 1, 'current_wears': 0, 'max_wears': 1, 'in_hamper': 0},
-      {'id': 'g-top-4', 'image_url': '', 'category': 'top', 'sub_type': 'Linen Shirt', 'color_name': 'Beige', 'hex_code': '#E2D9CC', 'formality_tier': 2, 'current_wears': 0, 'max_wears': 2, 'in_hamper': 0},
-      {'id': 'g-top-5', 'image_url': '', 'category': 'top', 'sub_type': 'Dress Shirt', 'color_name': 'Light Blue', 'hex_code': '#BAE6FD', 'formality_tier': 3, 'current_wears': 0, 'max_wears': 1, 'in_hamper': 0},
+      {'id': 'g-top-1', 'image_url': 'assets/clothes/stone_oxford.jpg', 'category': 'top', 'sub_type': 'Stone Oxford', 'color_name': 'White', 'hex_code': '#F8FAFC', 'formality_tier': 2, 'current_wears': 0, 'max_wears': 1, 'in_hamper': 0},
+      {'id': 'g-top-2', 'image_url': 'assets/clothes/navy_polo.jpg', 'category': 'top', 'sub_type': 'Navy Overshirt', 'color_name': 'Navy', 'hex_code': '#1E293B', 'formality_tier': 2, 'current_wears': 0, 'max_wears': 2, 'in_hamper': 0},
+      {'id': 'g-top-3', 'image_url': 'assets/clothes/ecru_tee.jpg', 'category': 'top', 'sub_type': 'Ecru Tee', 'color_name': 'Beige', 'hex_code': '#E2D9CC', 'formality_tier': 1, 'current_wears': 3, 'max_wears': 3, 'in_hamper': 1},
+      {'id': 'g-top-4', 'image_url': 'assets/clothes/stone_oxford.jpg', 'category': 'top', 'sub_type': 'Blue Poplin', 'color_name': 'Light Blue', 'hex_code': '#BAE6FD', 'formality_tier': 2, 'current_wears': 3, 'max_wears': 3, 'in_hamper': 1},
 
       // Bottoms
-      {'id': 'g-bot-1', 'image_url': '', 'category': 'bottom', 'sub_type': 'Chinos', 'color_name': 'Khaki', 'hex_code': '#C3B091', 'formality_tier': 2, 'current_wears': 0, 'max_wears': 3, 'in_hamper': 0},
-      {'id': 'g-bot-2', 'image_url': '', 'category': 'bottom', 'sub_type': 'Chinos', 'color_name': 'Muted Olive', 'hex_code': '#556B2F', 'formality_tier': 2, 'current_wears': 1, 'max_wears': 3, 'in_hamper': 0},
-      {'id': 'g-bot-3', 'image_url': '', 'category': 'bottom', 'sub_type': 'Tailored Trousers', 'color_name': 'Charcoal', 'hex_code': '#334155', 'formality_tier': 3, 'current_wears': 0, 'max_wears': 4, 'in_hamper': 0},
-      {'id': 'g-bot-4', 'image_url': '', 'category': 'bottom', 'sub_type': 'Selvedge Denim', 'color_name': 'Dark Indigo', 'hex_code': '#0F172A', 'formality_tier': 1, 'current_wears': 1, 'max_wears': 5, 'in_hamper': 0},
+      {'id': 'g-bot-1', 'image_url': 'assets/clothes/khaki_chinos.jpg', 'category': 'bottom', 'sub_type': 'Khaki Chinos', 'color_name': 'Khaki', 'hex_code': '#C3B091', 'formality_tier': 2, 'current_wears': 0, 'max_wears': 3, 'in_hamper': 0},
+      {'id': 'g-bot-2', 'image_url': 'assets/clothes/charcoal_trousers.jpg', 'category': 'bottom', 'sub_type': 'Charcoal Pleat', 'color_name': 'Charcoal', 'hex_code': '#334155', 'formality_tier': 3, 'current_wears': 0, 'max_wears': 4, 'in_hamper': 0},
+      {'id': 'g-bot-3', 'image_url': 'assets/clothes/selvedge_denim.jpg', 'category': 'bottom', 'sub_type': 'Selvedge Denim', 'color_name': 'Dark Indigo', 'hex_code': '#0F172A', 'formality_tier': 1, 'current_wears': 1, 'max_wears': 5, 'in_hamper': 0},
+      {'id': 'g-bot-4', 'image_url': 'assets/clothes/khaki_chinos.jpg', 'category': 'bottom', 'sub_type': 'Olive Chino', 'color_name': 'Olive', 'hex_code': '#556B2F', 'formality_tier': 2, 'current_wears': 4, 'max_wears': 4, 'in_hamper': 1},
 
       // Footwear
-      {'id': 'g-sho-1', 'image_url': '', 'category': 'footwear', 'sub_type': 'Minimalist Sneaker', 'color_name': 'White', 'hex_code': '#FFFFFF', 'formality_tier': 1, 'current_wears': 0, 'max_wears': 10, 'in_hamper': 0},
-      {'id': 'g-sho-2', 'image_url': '', 'category': 'footwear', 'sub_type': 'Chelsea Boots', 'color_name': 'Dark Brown', 'hex_code': '#4A2E18', 'formality_tier': 2, 'current_wears': 0, 'max_wears': 10, 'in_hamper': 0},
-      {'id': 'g-sho-3', 'image_url': '', 'category': 'footwear', 'sub_type': 'Leather Loafers', 'color_name': 'Black', 'hex_code': '#111827', 'formality_tier': 3, 'current_wears': 0, 'max_wears': 10, 'in_hamper': 0},
+      {'id': 'g-sho-1', 'image_url': 'assets/clothes/white_sneaker.jpg', 'category': 'footwear', 'sub_type': 'Minimalist Sneaker', 'color_name': 'White', 'hex_code': '#FFFFFF', 'formality_tier': 1, 'current_wears': 0, 'max_wears': 10, 'in_hamper': 0},
+      {'id': 'g-sho-2', 'image_url': 'assets/clothes/brown_derby.jpg', 'category': 'footwear', 'sub_type': 'Leather Derby', 'color_name': 'Dark Brown', 'hex_code': '#4A2E18', 'formality_tier': 2, 'current_wears': 0, 'max_wears': 10, 'in_hamper': 0},
+      {'id': 'g-sho-3', 'image_url': 'assets/clothes/chelsea_boots.jpg', 'category': 'footwear', 'sub_type': 'Chelsea Boots', 'color_name': 'Black', 'hex_code': '#111827', 'formality_tier': 2, 'current_wears': 0, 'max_wears': 10, 'in_hamper': 0},
 
       // Outerwear
-      {'id': 'g-out-1', 'image_url': '', 'category': 'outerwear', 'sub_type': 'Overcoat', 'color_name': 'Camel', 'hex_code': '#C19A6B', 'formality_tier': 3, 'current_wears': 0, 'max_wears': 10, 'in_hamper': 0},
-      {'id': 'g-out-2', 'image_url': '', 'category': 'outerwear', 'sub_type': 'Bomber Jacket', 'color_name': 'Navy', 'hex_code': '#1E293B', 'formality_tier': 2, 'current_wears': 0, 'max_wears': 8, 'in_hamper': 0},
+      {'id': 'g-out-1', 'image_url': 'assets/clothes/camel_overcoat.jpg', 'category': 'outerwear', 'sub_type': 'Camel Overcoat', 'color_name': 'Camel', 'hex_code': '#C19A6B', 'formality_tier': 3, 'current_wears': 0, 'max_wears': 10, 'in_hamper': 0},
+      {'id': 'g-out-2', 'image_url': 'assets/clothes/olive_jacket.jpg', 'category': 'outerwear', 'sub_type': 'Olive Harrington', 'color_name': 'Olive', 'hex_code': '#556B2F', 'formality_tier': 2, 'current_wears': 0, 'max_wears': 8, 'in_hamper': 0},
     ];
 
     final batch = db.batch();
@@ -94,6 +93,12 @@ class DatabaseService {
   // --- Garments CRUD ---
   Future<List<Garment>> getGarments() async {
     final db = await database;
+    // Check if initial items need image URL hydration
+    final check = await db.rawQuery('SELECT count(*) as count FROM garments WHERE image_url = ""');
+    if (check.isNotEmpty && (check.first['count'] as int? ?? 0) > 0) {
+      await db.delete('garments');
+      await _seedInitialCapsule(db);
+    }
     final maps = await db.query('garments', orderBy: 'category ASC, created_at DESC');
     return maps.map((m) => Garment.fromMap(m)).toList();
   }
