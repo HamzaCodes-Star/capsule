@@ -35,20 +35,8 @@ class GarmentSilhouette extends StatelessWidget {
     final effectiveWidth = width ?? size;
     final effectiveHeight = height ?? size;
 
-    var assetPath = garment.imageUrl;
-    if (assetPath.endsWith('.jpg')) {
-      final pngPath = assetPath.replaceAll('.jpg', '.png');
-      // If a png equivalent exists, use it
-      if (pngPath.contains('selvedge_denim') ||
-          pngPath.contains('stone_oxford') ||
-          pngPath.contains('white_sneaker') ||
-          pngPath.contains('camel_overcoat')) {
-        assetPath = pngPath;
-      }
-    }
-
-    final isAsset = assetPath.startsWith('assets/');
-    final isLocalFile = assetPath.isNotEmpty && !isAsset && File(assetPath).existsSync();
+    final isAsset = garment.imageUrl.startsWith('assets/');
+    final isLocalFile = garment.imageUrl.isNotEmpty && !isAsset && File(garment.imageUrl).existsSync();
 
     Widget garmentWidget;
 
@@ -57,8 +45,8 @@ class GarmentSilhouette extends StatelessWidget {
         width: effectiveWidth,
         height: effectiveHeight,
         child: isAsset
-            ? Image.asset(assetPath, fit: BoxFit.contain)
-            : Image.file(File(assetPath), fit: BoxFit.contain),
+            ? Image.asset(garment.imageUrl, fit: BoxFit.contain)
+            : Image.file(File(garment.imageUrl), fit: BoxFit.contain),
       );
     } else {
       final color = _parseHex(garment.hexCode);
@@ -78,30 +66,38 @@ class GarmentSilhouette extends StatelessWidget {
         children: [
           garmentWidget,
           Positioned(
-            top: -12,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-              decoration: BoxDecoration(
-                color: const Color(0xFF161A17),
-                borderRadius: BorderRadius.circular(4),
-                border: Border.all(color: Colors.white24, width: 0.8),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.5),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
+            top: -16,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF1E2420),
+                    borderRadius: BorderRadius.circular(4),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.25),
+                        blurRadius: 6,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              child: Text(
-                badgeText!,
-                style: GoogleFonts.dmSans(
-                  fontSize: 9,
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: 1.2,
-                  color: Colors.white,
+                  child: Text(
+                    badgeText!,
+                    style: GoogleFonts.dmSans(
+                      fontSize: 9,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 1.2,
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
-              ),
+                CustomPaint(
+                  size: const Size(8, 4),
+                  painter: _CaretPainter(color: const Color(0xFF1E2420)),
+                ),
+              ],
             ),
           ),
         ],
@@ -110,6 +106,25 @@ class GarmentSilhouette extends StatelessWidget {
 
     return garmentWidget;
   }
+}
+
+class _CaretPainter extends CustomPainter {
+  final Color color;
+  _CaretPainter({required this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()..color = color..style = PaintingStyle.fill;
+    final path = Path()
+      ..moveTo(0, 0)
+      ..lineTo(size.width, 0)
+      ..lineTo(size.width / 2, size.height)
+      ..close();
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
 class _GarmentPainter extends CustomPainter {

@@ -389,7 +389,7 @@ class _DailyStylistScreenState extends State<DailyStylistScreen> {
             child: Container(
               width: double.infinity,
               decoration: BoxDecoration(
-                color: const Color(0xFF1E2621), // Studio Slate Surface
+                color: const Color(0xFFF7F7F8), // Clean Studio Flat-Lay Surface
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
                 boxShadow: [
@@ -406,19 +406,25 @@ class _DailyStylistScreenState extends State<DailyStylistScreen> {
                   // Stylist / Occasion Badge (e.g. "DATE NIGHT" from Image 3)
                   Center(
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
                       decoration: BoxDecoration(
-                        color: Colors.black.withValues(alpha: 0.8),
+                        color: const Color(0xFF141715),
                         borderRadius: BorderRadius.circular(4),
-                        border: Border.all(color: Colors.white24, width: 0.8),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.2),
+                            blurRadius: 4,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
                       ),
                       child: Text(
                         vm.occasionBadge,
                         style: GoogleFonts.dmSans(
                           fontSize: 10,
                           fontWeight: FontWeight.w800,
-                          letterSpacing: 1.5,
-                          color: AppTheme.tertiaryGold,
+                          letterSpacing: 1.8,
+                          color: Colors.white,
                         ),
                       ),
                     ),
@@ -455,17 +461,7 @@ class _DailyStylistScreenState extends State<DailyStylistScreen> {
                                 height: 155,
                               ),
                               const SizedBox(height: 16),
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                decoration: BoxDecoration(
-                                  color: AppTheme.surfaceLight,
-                                  borderRadius: BorderRadius.circular(6),
-                                ),
-                                child: Text(
-                                  'Base Layer Clean',
-                                  style: GoogleFonts.dmSans(fontSize: 10, color: AppTheme.textMuted),
-                                ),
-                              ),
+                              const SizedBox(height: 10),
                             ],
                           ],
                         ),
