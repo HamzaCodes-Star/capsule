@@ -130,7 +130,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       child: Text(
                         _currentPage == 0
                             ? 'Start Bed-Spread Scan'
-                            : (_currentPage == 1 ? 'See Daily Stylist' : 'Explore Starter Capsule'),
+                            : (_currentPage == 1 ? 'See How Styling Works' : 'Get Started'),
                         style: GoogleFonts.dmSans(
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
@@ -160,7 +160,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     );
   }
 
-  // SLIDE 1: The Core Speed Wedge Differentiator
+  // SLIDE 1: The Core Speed Wedge
   Widget _buildSpeedWedgeSlide() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -179,7 +179,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           ),
           const SizedBox(height: 16),
 
-          // Bed-Spread AR Scan Showcase Card
           Expanded(
             child: Container(
               decoration: BoxDecoration(
@@ -195,7 +194,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     'assets/clothes/onboarding_bedspread.jpg',
                     fit: BoxFit.cover,
                   ),
-                  // Gradient overlay
                   Container(
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
@@ -208,7 +206,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       ),
                     ),
                   ),
-                  // Floating Speed Comparison Badge (Matching Design)
                   Positioned(
                     bottom: 16,
                     left: 20,
@@ -280,7 +277,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           ),
           const SizedBox(height: 16),
           Text(
-            'Forget photographing 30 items one-by-one against a wall. Spread 5 pieces on your bed. One snap segments them all.',
+            'Forget taking 30 separate photos against a wall. Spread 5 pieces on your bed. One snap scans them all.',
             textAlign: TextAlign.center,
             style: GoogleFonts.dmSans(
               fontSize: 13,
@@ -293,7 +290,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     );
   }
 
-  // SLIDE 2: Zero Manual Tagging (AI Automation)
+  // SLIDE 2: Simple, Human-Friendly AI Benefits (Zero Jargon)
   Widget _buildAiVisionSlide() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -301,7 +298,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         children: [
           const SizedBox(height: 12),
           Text(
-            'Zero manual tagging.\nAI does the work.',
+            'Zero typing.\nAI does the work.',
             textAlign: TextAlign.center,
             style: GoogleFonts.epilogue(
               fontSize: 28,
@@ -323,19 +320,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   _buildFeatureRow(
-                    icon: Icons.auto_awesome,
-                    title: 'Category & Sub-Type Extraction',
-                    subtitle: 'Instantly identifies Oxford shirts, selvedge denim, loafers, and outerwear.',
+                    icon: Icons.checkroom,
+                    title: 'Sorts Clothes Automatically',
+                    subtitle: 'Recognizes shirts, pants, shoes, and jackets without you typing a single word.',
                   ),
                   _buildFeatureRow(
                     icon: Icons.palette_outlined,
-                    title: 'HSL Euclidean Fabric Color Detection',
-                    subtitle: 'Extracts exact dominant fabric hex codes for color harmony matching.',
+                    title: 'Smart Color Matching',
+                    subtitle: 'Picks colors that look great together so your daily outfits never clash.',
                   ),
                   _buildFeatureRow(
                     icon: Icons.local_laundry_service_outlined,
-                    title: 'Automated Wear-Cycle Guardrails',
-                    subtitle: 'Assigns hygiene thresholds (1 wear for shirts, 3 for chinos, 5 for denim).',
+                    title: 'Reminds You When to Wash',
+                    subtitle: 'Knows when a shirt needs laundry and when your jackets are good for another wear.',
                   ),
                 ],
               ),
@@ -343,7 +340,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           ),
           const SizedBox(height: 16),
           Text(
-            'No typing names, no manual cropping, no color pickers. Gemini Vision does the tedious work in 3 seconds.',
+            'No manual cropping or color pickers. Just take one photo of your clothes and you\'re ready to go.',
             textAlign: TextAlign.center,
             style: GoogleFonts.dmSans(
               fontSize: 13,
@@ -356,7 +353,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     );
   }
 
-  // SLIDE 3: The Minimalist Wardrobe Payoff
+  // SLIDE 3: The Daily Stylist Benefit (Simple & Clear)
   Widget _buildStyleEffortlessSlide() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -364,7 +361,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         children: [
           const SizedBox(height: 12),
           Text(
-            'Less clothes.\nInfinite style.',
+            'Less clothes.\nEffortless style.',
             textAlign: TextAlign.center,
             style: GoogleFonts.epilogue(
               fontSize: 28,
@@ -386,19 +383,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   _buildFeatureRow(
-                    icon: Icons.thermostat_outlined,
-                    title: 'Weather-Aware Outfits',
-                    subtitle: 'Recommendations adapt to temperature and rain (no suede shoes in the wet).',
+                    icon: Icons.wb_sunny_outlined,
+                    title: 'Dressed for the Weather',
+                    subtitle: 'Recommends warm layers when it\'s cold and leaves suede shoes at home when it rains.',
                   ),
                   _buildFeatureRow(
                     icon: Icons.tune,
-                    title: 'Formality & Vibe Dial',
-                    subtitle: 'Dial from Casual to Smart Casual to Tailored Business with 1 tap.',
+                    title: 'Pick Your Vibe for the Day',
+                    subtitle: 'Switch between Casual, Smart Casual, or Office Tailored with a single tap.',
                   ),
                   _buildFeatureRow(
                     icon: Icons.swipe_outlined,
-                    title: 'Gamified Swipe-Out Laundry',
-                    subtitle: 'Washing 4 items unlocks 11 new outfits. Swipe clothes clean as you wash.',
+                    title: 'Swipe Clean Clothes Back In',
+                    subtitle: 'When you do laundry, swipe washed pieces right back into your closet.',
                   ),
                 ],
               ),
@@ -406,7 +403,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           ),
           const SizedBox(height: 16),
           Text(
-            'Eliminate morning decision fatigue forever. A tight 15–20 piece capsule yields dozens of timeless looks.',
+            'No more standing in front of your closet wondering what to wear. Wake up to a sharp outfit every morning.',
             textAlign: TextAlign.center,
             style: GoogleFonts.dmSans(
               fontSize: 13,
